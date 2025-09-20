@@ -277,4 +277,46 @@ window.addEventListener('scroll', () => {
   const scrolled = window.pageYOffset;
   const parallax = document.querySelector('.header-hero');
   parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+
+});
+
+// ===== MOBILE VIDEO HANDLER =====
+document.addEventListener('DOMContentLoaded', () => {
+  const video = document.getElementById('highlight-video');
+  
+  // Deteksi mobile device
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  if (isMobile) {
+    // Untuk mobile: hapus autoplay, tambah poster
+    video.removeAttribute('autoplay');
+    video.setAttribute('poster', 'https://via.placeholder.com/800x450?text=Manchester+United+Highlight');
+    
+    // Hapus muted agar ada suara
+    video.removeAttribute('muted');
+    
+    // Force play saat user klik
+    video.addEventListener('click', () => {
+      video.play().catch(e => {
+        console.log('Video play failed:', e);
+        // Tampilkan fallback jika video gagal
+        const fallback = video.querySelector('.video-fallback');
+        if (fallback) {
+          fallback.style.display = 'flex';
+        }
+      });
+    });
+  } else {
+    // Untuk desktop: tetap pakai autoplay muted
+    video.setAttribute('autoplay', '');
+    video.setAttribute('muted', '');
+  }
+  
+  // Handle video error
+  video.addEventListener('error', () => {
+    const fallback = video.querySelector('.video-fallback');
+    if (fallback) {
+      fallback.style.display = 'flex';
+    }
+  });
 });
